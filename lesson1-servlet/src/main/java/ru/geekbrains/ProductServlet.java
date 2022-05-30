@@ -10,10 +10,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @WebServlet(urlPatterns = "/product/*")
 public class ProductServlet extends HttpServlet {
 
+    private static final Pattern PARAM_PATTERN = Pattern.compile("\\/(\\d+)");
     private ProductList productList;
 
     @Override
@@ -33,30 +36,62 @@ public class ProductServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        PrintWriter writer = resp.getWriter();
-        writer.println("<table>");
-        writer.println("<tr>");
-        writer.println("<th>Id</th>");
-        writer.println("<th>Title</th>");
-        writer.println("<th>Cost</th>");
-        writer.println("</tr>");
-
         if(req.getPathInfo() == null || req.getPathInfo().equals("/")){
-            productList.findAll().forEach(product -> {
-                writer.println("<tr>");
-                writer.println("<th>" + product.getId() + "</th>");
-                writer.println("<th>" + product.getTitle() + "</th>");
-                writer.println("<th>" + product.getCost() + "</th>");
-                writer.println("</tr>");
-            });
+            req.setAttribute("products", productList.findAll());
+            getServletContext().getRequestDispatcher("/product.jsp").forward(req, resp);
         } else {
-            long l = Long.parseLong(req.getPathInfo().replace("/", ""));
-            Product p = productList.getProduct(l);
-            writer.println("<tr>");
-            writer.println("<th>" + p.getId() + "</th>");
-            writer.println("<th>" + p.getTitle() + "</th>");
-            writer.println("<th>" + p.getCost() + "</th>");
-            writer.println("</tr>");
+            Matcher matcher = PARAM_PATTERN.matcher(req.getPathInfo());
+            if (matcher.matches()){
+                long id = Long.parseLong(matcher.group(1));
+                Product p = productList.getProduct(id);
+                if (p == null){
+                    resp.getWriter().println("User not found");
+                    resp.setStatus(404);
+                    return;
+                }
+                req.setAttribute("product", p.getTitle());
+                getServletContext().getRequestDispatcher("/product_form.jsp").forward(req, resp);
+            } else {
+                resp.getWriter().println("Bad parameter value");
+                resp.setStatus(400);
+            }
         }
+
+//        PrintWriter writer = resp.getWriter();
+//        writer.println("<table>");
+//        writer.println("<tr>");
+//        writer.println("<th>Id</th>");
+//        writer.println("<th>Title</th>");
+//        writer.println("<th>Cost</th>");
+//        writer.println("</tr>");
+//
+//        if(req.getPathInfo() == null || req.getPathInfo().equals("/")){
+//            productList.findAll().forEach(product -> {
+//                writer.println("<tr>");
+//                writer.println("<th><a href='" + req.getContextPath() + "/product/" + product.getId() + "'>" + product.getId() + "</th>");
+//                writer.println("<th>" + product.getTitle() + "</th>");
+//                writer.println("<th>" + product.getCost() + "</th>");
+//                writer.println("</tr>");
+//            });
+//        } else {
+//            Matcher matcher = PARAM_PATTERN.matcher(req.getPathInfo());
+//            if (matcher.matches()){
+//                long id = Long.parseLong(matcher.group(1));
+//                Product p = productList.getProduct(id);
+//                if (p == null){
+//                    resp.getWriter().println("User not found");
+//                    resp.setStatus(404);
+//                    return;
+//                }
+//                writer.println("<tr>");
+//                writer.println("<th>" + p.getId() + "</th>");
+//                writer.println("<th>" + p.getTitle() + "</th>");
+//                writer.println("<th>" + p.getCost() + "</th>");
+//                writer.println("</tr>");
+//            } else {
+//                resp.getWriter().println("Bad parameter value");
+//                resp.setStatus(400);
+//            }
+//        }
     }
 }

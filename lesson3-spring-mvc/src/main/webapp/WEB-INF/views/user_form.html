@@ -45,7 +45,7 @@
                 </div>
             </form>
 
-            <form  th:action="@{/user}" method="post" th:object="${user}">
+            <form th:if="${user!=null}" th:action="@{/user}" method="post" th:object="${user}">
                 <div>
                     <input  th:field="*{id}" type="hidden" id="id" name="id" >
                     <div class="form-group">

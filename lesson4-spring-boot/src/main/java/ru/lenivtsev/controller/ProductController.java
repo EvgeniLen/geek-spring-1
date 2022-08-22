@@ -5,14 +5,12 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import ru.lenivtsev.products.Product;
 import ru.lenivtsev.products.ProductRepository;
 
 import javax.validation.Valid;
+import java.util.Optional;
 
 @Slf4j
 @Controller
@@ -30,6 +28,7 @@ public class ProductController {
 
         @GetMapping("/{id}")
         public String form(@PathVariable("id") long id, Model model) {
+            Optional<Product> optionalProduct = productRepository.findById(id);
             model.addAttribute("product", productRepository.findById(id));
             return "product_form";
         }
@@ -40,7 +39,7 @@ public class ProductController {
             return "product_form";
         }
 
-        @GetMapping("/delete/{id}")
+        @DeleteMapping("/delete/{id}")
         public String deleteUserById(@PathVariable long id) {
             productRepository.delete(id);
             return "redirect:/product";

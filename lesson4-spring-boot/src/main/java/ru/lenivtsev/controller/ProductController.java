@@ -2,17 +2,17 @@ package ru.lenivtsev.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
+import ru.lenivtsev.EntityNotFoundException;
 import ru.lenivtsev.products.Product;
 import ru.lenivtsev.products.ProductRepository;
 
 import javax.validation.Valid;
+import java.util.Optional;
 
 @Slf4j
 @Controller
@@ -30,7 +30,9 @@ public class ProductController {
 
         @GetMapping("/{id}")
         public String form(@PathVariable("id") long id, Model model) {
-            model.addAttribute("product", productRepository.findById(id));
+            Optional<Product> optionalProduct = productRepository.findById(id);
+            model.addAttribute("product", productRepository.findById(id)
+                    .orElseThrow(() -> new EntityNotFoundException("Product not found")));
             return "product_form";
         }
 
@@ -40,14 +42,14 @@ public class ProductController {
             return "product_form";
         }
 
-        @GetMapping("/delete/{id}")
-        public String deleteUserById(@PathVariable long id) {
+        @DeleteMapping("{id}")
+        public String deleteProductById(@PathVariable long id) {
             productRepository.delete(id);
             return "redirect:/product";
         }
 
         @PostMapping
-        public String saveProduct(@Valid Product product, BindingResult bindingResult) {
+        public String saveProduct(@RequestBody @Valid Product product, BindingResult bindingResult) {
             if (bindingResult.hasErrors()) {
                 return "product_form";
             }
@@ -59,5 +61,12 @@ public class ProductController {
         public String updateProduct(Product product) {
             productRepository.save(product);
             return "redirect:/product";
+        }
+
+        @ExceptionHandler
+        @ResponseStatus(HttpStatus.NOT_FOUND)
+        public String notFoundExceptionHandler(Model model, EntityNotFoundException e) {
+            model.addAttribute("message", e.getMessage());
+            return "not_found";
         }
 }

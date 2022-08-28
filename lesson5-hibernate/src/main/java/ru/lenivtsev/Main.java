@@ -12,7 +12,6 @@ public class Main {
                 .configure("hibernate.cfg.xml")
                 .buildSessionFactory();
 
-        EntityManager entityManager = entityManagerFactory.createEntityManager();
 
         /*entityManager.getTransaction().begin();
         entityManager.persist(new Product("Potato", 5L));
@@ -22,8 +21,7 @@ public class Main {
         entityManager.persist(new Product("Carrot", 8L));
         entityManager.getTransaction().commit();*/
 
-        ProductRepository productRepository = new ProductRepository();
-        productRepository.setEntityManager(entityManager);
+        ProductRepository productRepository = new ProductRepository(entityManagerFactory);
 
         productRepository.findById(2L);
         productRepository.deleteById(3L);
@@ -35,7 +33,6 @@ public class Main {
         product.setId(1L);
         productRepository.saveOrUpdate(product);
 
-        entityManager.close();
         entityManagerFactory.close();
     }
 }

@@ -12,6 +12,7 @@
         <module>lesson1_servlet</module>
         <module>lesson2-spring-basic</module>
         <module>lesson3-spring-mvc</module>
+        <module>lesson5-hibernate</module>
     </modules>
 
     <properties>

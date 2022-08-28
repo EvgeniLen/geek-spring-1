@@ -1,22 +1,15 @@
 package ru.lenivtsev.model;
 
-import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.ToString;
+import javax.persistence.*;
 
 @Getter
 @Setter
 @NoArgsConstructor
 @Entity
-@ToString
 @Table(name = "products")
-@NamedQueries({
-        @NamedQuery(name = "findAllProducts", query = "SELECT p FROM Product p"),
-        @NamedQuery(name = "countAllProducts", query = "SELECT count(p) FROM Product p"),
-        @NamedQuery(name = "deleteProductByID", query = "DELETE FROM Product p WHERE p.id = :id")
-})
 public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

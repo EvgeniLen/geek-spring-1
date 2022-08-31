@@ -39,28 +39,14 @@
                 <input th:field="*{id}" type="hidden" id="id" name="id" >
                 <div class="form-group">
                     <label>Name</label>
-                    <input th:field="*{name}" type="text" class="form-control" id="name" name="name" placeholder="Enter name" >
-                    <p class="text-danger" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></p>
+                    <input th:field="*{title}" type="text" class="form-control" id="title" name="title" placeholder="Enter product name" >
+                    <p class="text-danger" th:if="${#fields.hasErrors('title')}" th:errors="*{title}"></p>
                 </div>
                 <div class="form-group">
                     <label>Cost</label>
                     <input th:field="*{cost}" type="text" class="form-control" id="cost" name="cost" placeholder="Enter cost" >
                     <p class="text-danger" th:if="${#fields.hasErrors('cost')}" th:errors="*{cost}"></p>
                 </div>
-                <div class="form-group">
-                    <label>Min Cost</label>
-                    <input th:field="*{minCost}" type="text" class="form-control" id="minCost" name="minCost" placeholder="Enter min cost" >
-                    <p class="text-danger" th:if="${#fields.hasErrors('minCost')}" th:errors="*{minCost}"></p>
-                </div>
-                <div class="form-group">
-                    <label>Max Cost</label>
-                    <input th:field="*{maxCost}" type="text" class="form-control" id="maxCost" name="maxCost" placeholder="Enter max cost" >
-                    <p class="text-danger" th:if="${#fields.hasErrors('maxCost')}" th:errors="*{maxCost}"></p>
-                </div>
-                <div class="form-group">
-                    <label>Date</label>
-                    <input th:field="*{date}" type="date" class="form-control" id="date" name="date" placeholder="Enter date" >
-                    <p class="text-danger" th:if="${#fields.hasErrors('date')}" th:errors="*{date}"></p>
                 </div>
                 <button type="submit" class="btn btn-primary">Submit</button>
             </form>

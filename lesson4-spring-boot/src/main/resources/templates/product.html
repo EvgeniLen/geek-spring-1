@@ -38,6 +38,18 @@
             <a class="btn btn-primary" th:href="@{/product/new}">Add Product</a>
         </div>
 
+        <div class="col-12 mt-3">
+            <form class="form-inline">
+                <div class="form-group mb-2 mr-2">
+                    <label for="productFilter" class="sr-only" >Product filter</label>
+                    <input type="text" class="form-control" id="productFilter"
+                           title=">1 - the cost is less&#013;<1 - the cost is higher&#013;1-10 - the cost between"
+                           name="productFilter" placeholder="productFilter by cost">
+                </div>
+                <button type="submit" class="btn btn-primary mb-2">Apply</button>
+            </form>
+        </div>
+
         <div class="col-12">
             <table class="table table-bordered my-2">
                 <thead>
@@ -45,20 +57,13 @@
                     <th scope="col">Id</th>
                     <th scope="col">Product</th>
                     <th scope="col">Cost</th>
-                    <th scope="col">MinCost</th>
-                    <th scope="col">MaxCost</th>
-                    <th scope="col">Date</th>
-                    <th scope="col">Actions</th>
                 </tr>
                 </thead>
                 <tbody>
                 <tr th:each="product : ${products}">
                     <th scope="row" th:text="${product.id}">1</th>
-                    <td th:text="${product.name}">Alex</td>
+                    <td th:text="${product.title}"></td>
                     <td th:text="${product.cost}">0</td>
-                    <td th:text="${product.minCost}">0</td>
-                    <td th:text="${product.maxCost}">0</td>
-                    <td th:text="${product.date}">01.01.2000</td>
                     <td>
                         <a class="btn btn-success" th:href="@{/product/{id}(id = ${product.id})}"><i class="fas fa-edit"></i></a>
                         <form class="d-inline" th:method="delete" th:action="@{/product/{id}/(id = ${product.id})}">

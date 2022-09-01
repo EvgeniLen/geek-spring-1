@@ -1,83 +1,54 @@
 package ru.lenivtsev.products;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import javax.validation.constraints.DecimalMax;
-import javax.validation.constraints.DecimalMin;
-import javax.validation.constraints.NotBlank;
-
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import javax.persistence.*;
+import java.math.BigDecimal;
 import java.util.Objects;
+
 
 @Getter
 @Setter
+@NoArgsConstructor
+@Entity
+@Table(name = "products")
 public class Product {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @NotBlank(message = "Can not be empty!")
-    private String name;
-    @DecimalMax(message = "Cost can not exceed 999",
-            value = "999")
-    @DecimalMin(message = "Cost should be positive", value = "0")
-    private Long cost;
 
-    @DecimalMax(message = "Min cost can not exceed 999",
-            value = "999")
-    @DecimalMin(message = "Min cost should be positive", value = "0")
-    private Long minCost;
+    @Column(nullable = false, unique = true)
+    private String title;
 
-    @DecimalMax(message = "Max cost can not exceed 999",
-            value = "999")
-    @DecimalMin(message = "Max cost should be positive", value = "0")
-    private Long maxCost;
+    @Column(nullable = false)
+    private BigDecimal cost;
 
-    @NotBlank(message = "Can not be empty!")
-    //Проверка даты в html уже втроенная
-    private String date;
-
-    public Product(String name, Long cost) {
-        this.name = name;
+    public Product(String title, BigDecimal cost) {
+        this.title = title;
         this.cost = cost;
     }
-
-//    public String getDate() {
-//        if (date != null && !date.isEmpty()) {
-//            String newDate;
-//            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
-//            SimpleDateFormat mySimpleDateFormat = new SimpleDateFormat("dd.MM.yyyy");
-//            Date oldDate = null;
-//            try {
-//                oldDate = simpleDateFormat.parse(date);
-//                newDate = mySimpleDateFormat.format(oldDate);
-//                return newDate;
-//            } catch (ParseException e) {
-//                throw new RuntimeException(e);
-//            }
-//        }
-//        return date;
-//    }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Product product = (Product) o;
-        return Objects.equals(id, product.id) && Objects.equals(name, product.name);
+        return Objects.equals(id, product.id) && Objects.equals(title, product.title);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name);
+        return Objects.hash(id, title);
     }
 
     @Override
     public String toString() {
         return "Product{" +
                 "id=" + id +
-                ", name='" + name + '\'' +
-                ", cost='" + cost + '\'' +
+                ", title='" + title + '\'' +
+                ", cost=" + cost +
                 '}';
     }
 }

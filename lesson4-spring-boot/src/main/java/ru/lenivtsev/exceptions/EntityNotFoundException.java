@@ -1,4 +1,4 @@
-package ru.lenivtsev;
+package ru.lenivtsev.exceptions;
 
 public class EntityNotFoundException extends RuntimeException {
 

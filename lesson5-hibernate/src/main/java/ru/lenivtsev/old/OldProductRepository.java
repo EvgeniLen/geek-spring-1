@@ -1,4 +1,4 @@
-package ru.lenivtsev.model.homework;
+package ru.lenivtsev.old;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceException;

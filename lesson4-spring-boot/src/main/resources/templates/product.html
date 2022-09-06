@@ -43,7 +43,7 @@
                 <div class="form-group mb-2 mr-2">
                     <label for="productTitleFilter" class="sr-only" >Product title filter</label>
                     <input type="text" class="form-control" id="productTitleFilter"
-                           name="productTitleFilter" placeholder="Filter by title">
+                           name="productTitleFilter" placeholder="Filter by title" th:value="${param.productTitleFilter}">
                 </div>
                 <button type="submit" class="btn btn-primary mb-2">Apply</button>
             </form>
@@ -54,7 +54,7 @@
                     <label for="productCostFilter" class="sr-only" >Product cost filter</label>
                     <input type="text" class="form-control" id="productCostFilter"
                            title="[-1] - the cost is less&#013;[1-] - the cost is higher&#013;[1-10] - the cost between"
-                           name="productCostFilter" placeholder="Filter by cost">
+                           name="productCostFilter" placeholder="Filter by cost" th:value="${param.productCostFilter}">
                 </div>
                 <button type="submit" class="btn btn-primary mb-2">Apply</button>
             </form>
@@ -64,7 +64,13 @@
             <table class="table table-bordered my-2">
                 <thead>
                 <tr>
-                    <th scope="col">Id</th>
+                    <th scope="col">
+                        <a class="page-link" >
+
+                        </a>
+
+                        Id
+                    </th>
                     <th scope="col">Product</th>
                     <th scope="col">Cost</th>
                 </tr>

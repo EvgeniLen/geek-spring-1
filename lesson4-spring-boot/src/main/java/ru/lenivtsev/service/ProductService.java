@@ -3,6 +3,7 @@ package ru.lenivtsev.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import ru.lenivtsev.model.dto.ProductDto;
 import ru.lenivtsev.model.mapper.ProductDtoMapper;
@@ -20,7 +21,7 @@ public class ProductService {
     private final ProductRepository productRepository;
     private final ProductDtoMapper mapper;
 
-    public Page<ProductDto> findAllByFilter(String productTitleFilter, String costFilter, int page, int size){
+    public Page<ProductDto> findAllByFilter(String productTitleFilter, String costFilter, int page, int size, String sortField){
         productTitleFilter = productTitleFilter == null || productTitleFilter.isBlank() ? null : "%" + productTitleFilter.trim() + "%";
         costFilter = costFilter == null || costFilter.isBlank() ? null : costFilter.trim();
         BigDecimal costFilterMin = null;
@@ -33,7 +34,7 @@ public class ProductService {
                 costFilterMax = matcher.group(2)==null ? null : new BigDecimal(matcher.group(2));
             }
         }
-        return productRepository.productByFilter(productTitleFilter, costFilterMin, costFilterMax, PageRequest.of(page, size))
+        return productRepository.productByFilter(productTitleFilter, costFilterMin, costFilterMax, PageRequest.of(page, size, Sort.by(sortField)))
                 .map(mapper::map);
     }
 

@@ -31,11 +31,13 @@ public class ProductController {
                 @RequestParam(required = false) String productCostFilter,
                 @RequestParam(required = false) Optional<Integer> page,
                 @RequestParam(required = false) Optional<Integer> size,
+                @RequestParam(required = false) Optional<String> sortField,
                 Model model) {
             int pageValue = page.orElse(1) - 1;
             if (pageValue < 0) pageValue = 0;
             int sizeValue = size.orElse((10));
-            model.addAttribute("products", service.findAllByFilter(productTitleFilter, productCostFilter, pageValue, sizeValue));
+            String sortFiledValue = sortField.filter(s -> !s.isBlank()).orElse("id");
+            model.addAttribute("products", service.findAllByFilter(productTitleFilter, productCostFilter, pageValue, sizeValue, sortFiledValue));
             return "product";
         }
 

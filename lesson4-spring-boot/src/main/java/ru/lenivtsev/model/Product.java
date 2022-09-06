@@ -1,5 +1,6 @@
-package ru.lenivtsev.products;
+package ru.lenivtsev.model;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -12,6 +13,7 @@ import java.util.Objects;
 @Getter
 @Setter
 @NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "products")
 public class Product {
@@ -24,11 +26,6 @@ public class Product {
 
     @Column(nullable = false)
     private BigDecimal cost;
-
-    public Product(String title, BigDecimal cost) {
-        this.title = title;
-        this.cost = cost;
-    }
 
     @Override
     public boolean equals(Object o) {

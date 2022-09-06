@@ -8,13 +8,14 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import ru.lenivtsev.exceptions.EntityNotFoundException;
-import ru.lenivtsev.products.Product;
-import ru.lenivtsev.products.ProductRepository;
+import ru.lenivtsev.model.Product;
+import ru.lenivtsev.model.dto.ProductDto;
+import ru.lenivtsev.service.ProductService;
 
 import javax.validation.Valid;
 import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.Optional;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 @Slf4j
@@ -22,65 +23,53 @@ import java.util.regex.Pattern;
 @RequestMapping("/product")
 @RequiredArgsConstructor
 public class ProductController {
-        private static final Pattern PARAM_PATTERN_LESS = Pattern.compile("\\<(\\d+)");
-        private static final Pattern PARAM_PATTERN_MORE= Pattern.compile("\\>(\\d+)");
-        private static final Pattern PARAM_PATTERN_BETWEEN = Pattern.compile("(\\d+)\\-(\\d+)");
-
-        private final ProductRepository productRepository;
+        private final ProductService service;
 
         @GetMapping
-        public String listPage(@RequestParam Optional<String> productFilter, Model model) {
-            if (productFilter.isEmpty() || productFilter.get().isBlank()){
-                model.addAttribute("products", productRepository.findAll());
-
-            } else {
-                Matcher matcher = PARAM_PATTERN_BETWEEN.matcher(productFilter.get());
-                if (matcher.matches()) {
-                    model.addAttribute("products", productRepository.getProductsByCostBetween(new BigDecimal(matcher.group(1)), new BigDecimal(matcher.group(2))));
-                }
-                matcher = PARAM_PATTERN_LESS.matcher(productFilter.get());
-                if (matcher.matches()) {
-                    model.addAttribute("products", productRepository.getProductsByCostBefore(new BigDecimal(matcher.group(1))));
-                }
-                matcher = PARAM_PATTERN_MORE.matcher(productFilter.get());
-                if (matcher.matches()) {
-                    model.addAttribute("products", productRepository.getProductsByCostAfter(new BigDecimal(matcher.group(1))));
-                }
-            }
+        public String listPage(
+                @RequestParam(required = false) String productTitleFilter,
+                @RequestParam(required = false) String productCostFilter,
+                @RequestParam(required = false) Optional<Integer> page,
+                @RequestParam(required = false) Optional<Integer> size,
+                Model model) {
+            int pageValue = page.orElse(1) - 1;
+            if (pageValue < 0) pageValue = 0;
+            int sizeValue = size.orElse((10));
+            model.addAttribute("products", service.findAllByFilter(productTitleFilter, productCostFilter, pageValue, sizeValue));
             return "product";
         }
 
         @GetMapping("/{id}")
         public String form(@PathVariable("id") long id, Model model) {
-            model.addAttribute("product", productRepository.findById(id)
+            model.addAttribute("product", service.findByProductId(id)
                     .orElseThrow(() -> new EntityNotFoundException("Product not found")));
             return "product_form";
         }
 
         @GetMapping("/new")
         public String addNewProduct(Model model) {
-            model.addAttribute("product", new Product("", BigDecimal.ZERO));
+            model.addAttribute("product", new ProductDto(new BigDecimal(BigInteger.ZERO)));
             return "product_form";
         }
 
         @DeleteMapping("{id}")
         public String deleteProductById(@PathVariable long id) {
-            productRepository.deleteById(id);
+            service.deleteProductById(id);
             return "redirect:/product";
         }
 
         @PostMapping
-        public String saveProduct(@Valid Product product, BindingResult bindingResult) {
+        public String saveProduct(@Valid @ModelAttribute("product") ProductDto product, BindingResult bindingResult) {
             if (bindingResult.hasErrors()) {
                 return "product_form";
             }
-            productRepository.save(product);
+            service.save(product);
             return "redirect:/product";
         }
 
         @PostMapping("/update")
-        public String updateProduct(Product product) {
-            productRepository.save(product);
+        public String updateProduct(@ModelAttribute("product") ProductDto product) {
+            service.save(product);
             return "redirect:/product";
         }
 

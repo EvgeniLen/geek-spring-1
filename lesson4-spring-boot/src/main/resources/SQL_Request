@@ -1,0 +1,3 @@
+insert into products (title, cost) VALUE ("prod13", 1), ("prod14", 2), ("prod15", 3), ("prod16", 4),
+    ("prod17", 5), ("prod18", 6), ("prod19", 7), ("prod20", 8), ("prod21", 9), ("prod22", 10),
+    ("prod23", 11), ("prod24", 12);

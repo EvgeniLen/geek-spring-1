@@ -43,7 +43,7 @@ public class ProductService {
     }
 
     public void save(ProductDto productDto) {
-        productRepository.saveAndFlush(mapper.map(productDto));
+        productRepository.save(mapper.map(productDto));
     }
 
     public void deleteProductById(Long id){

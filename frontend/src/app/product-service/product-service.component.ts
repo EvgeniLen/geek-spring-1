@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {HttpClient} from "@angular/common/http";
 import {Page} from "../model/page";
+import {Product} from "../model/product";
 
 @Component({
   selector: 'app-product-service',
@@ -15,11 +16,20 @@ export class ProductServiceComponent implements OnInit {
     return this.http.get<Page>(this.baseUrl);
   }
 
+  public findById(id: number){
+    return this.http.get<Product>(this.baseUrl.concat(`/${id}`))
+  }
+
   public delete(id: number | null){
-    this.http.delete(this.baseUrl + "/" + id)
+    this.http.delete(this.baseUrl.concat(`/${id}`))
+  }
+
+  public save(product: Product) {
+    return this.http.put<Product>(this.baseUrl, product)
   }
 
   ngOnInit(): void {
   }
+
 
 }

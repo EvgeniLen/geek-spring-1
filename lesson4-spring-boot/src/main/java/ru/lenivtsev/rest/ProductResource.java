@@ -8,9 +8,7 @@ import ru.lenivtsev.exceptions.EntityNotFoundException;
 import ru.lenivtsev.model.dto.ProductDto;
 import ru.lenivtsev.service.ProductService;
 
-import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("api/v1/product")
@@ -56,7 +54,7 @@ public class ProductResource {
         service.deleteProductById(id);
     }
 
-    @PostMapping("/update")
+    @PutMapping()
     public ProductDto updateProduct(@RequestBody ProductDto product) {
         service.save(product);
         return product;

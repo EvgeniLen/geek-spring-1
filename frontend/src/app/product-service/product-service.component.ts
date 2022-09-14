@@ -17,15 +17,16 @@ export class ProductServiceComponent implements OnInit {
   }
 
   public findById(id: number){
-    return this.http.get<Product>(this.baseUrl.concat(`/${id}`))
+    return this.http.get<Product>(this.baseUrl.concat(`/${id}`));
   }
 
   public delete(id: number | null){
-    this.http.delete(this.baseUrl.concat(`/${id}`))
+    //this.http.delete(this.baseUrl.concat(`/${id}`))
+    this.http.delete("api/v1/product/13");
   }
 
   public save(product: Product) {
-    return this.http.put<Product>(this.baseUrl, product)
+    return this.http.put<Product>(this.baseUrl, product);
   }
 
   ngOnInit(): void {

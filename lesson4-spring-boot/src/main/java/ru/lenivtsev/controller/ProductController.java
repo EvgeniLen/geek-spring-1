@@ -8,7 +8,6 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import ru.lenivtsev.exceptions.EntityNotFoundException;
-import ru.lenivtsev.model.Product;
 import ru.lenivtsev.model.dto.ProductDto;
 import ru.lenivtsev.service.ProductService;
 
@@ -16,7 +15,6 @@ import javax.validation.Valid;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.Optional;
-import java.util.regex.Pattern;
 
 @Slf4j
 @Controller

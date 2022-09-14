@@ -8,9 +8,7 @@ import ru.lenivtsev.exceptions.EntityNotFoundException;
 import ru.lenivtsev.model.dto.ProductDto;
 import ru.lenivtsev.service.ProductService;
 
-import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("api/v1/product")
@@ -20,7 +18,7 @@ public class ProductResource {
     private final ProductService service;
 
     @GetMapping
-    public List<ProductDto> listPage(
+    public Page<ProductDto> listPage(
             @RequestParam(required = false) String productTitleFilter,
             @RequestParam(required = false) String productCostFilter,
             @RequestParam(required = false) Optional<Integer> page,
@@ -31,8 +29,8 @@ public class ProductResource {
         int sizeValue = size.orElse((10));
         String sortFiledValue = sortField.filter(s -> !s.isBlank()).orElse("id");
         Page<ProductDto> allByFilter = service.findAllByFilter(productTitleFilter, productCostFilter, pageValue, sizeValue, sortFiledValue);
-        List<ProductDto> products = allByFilter.get().collect(Collectors.toList());
-        return products;
+        //List<ProductDto> products = allByFilter.get().collect(Collectors.toList());
+        return allByFilter;
     }
 
     @GetMapping("/{id}")
@@ -52,12 +50,11 @@ public class ProductResource {
     }
 
     @DeleteMapping("{id}")
-    public String deleteProductById(@PathVariable long id) {
+    public void deleteProductById(@PathVariable long id) {
         service.deleteProductById(id);
-        return "complete";
     }
 
-    @PostMapping("/update")
+    @PutMapping()
     public ProductDto updateProduct(@RequestBody ProductDto product) {
         service.save(product);
         return product;

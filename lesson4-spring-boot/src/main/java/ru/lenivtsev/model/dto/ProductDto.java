@@ -22,7 +22,7 @@ public class ProductDto {
     private String title;
 
     @DecimalMax(message = "Cost can not exceed 1000000",
-            value = "999")
+            value = "1000000")
     @DecimalMin(message = "Cost should be positive", value = "0")
     private BigDecimal cost;
 

@@ -1,6 +1,5 @@
-package ru.lenivtsev.products;
+package ru.lenivtsev.repository;
 
-import java.security.PublicKey;
 import java.util.List;
 
 public interface ProductRepository {

@@ -2,8 +2,8 @@ package ru.lenivtsev;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import ru.lenivtsev.products.Product;
-import ru.lenivtsev.products.ProductRepository;
+import ru.lenivtsev.repository.Product;
+import ru.lenivtsev.repository.ProductRepository;
 
 import javax.annotation.PostConstruct;
 import java.util.List;

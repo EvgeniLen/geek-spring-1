@@ -1,4 +1,4 @@
-package ru.lenivtsev.products;
+package ru.lenivtsev.repository;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -8,7 +8,6 @@ import org.springframework.stereotype.Repository;
 import ru.lenivtsev.model.Product;
 
 import java.math.BigDecimal;
-import java.util.List;
 
 
 @Repository

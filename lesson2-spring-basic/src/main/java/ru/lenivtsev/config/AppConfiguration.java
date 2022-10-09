@@ -5,8 +5,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Scope;
 import ru.lenivtsev.Cart;
 import ru.lenivtsev.ProductService;
-import ru.lenivtsev.products.ProductRepository;
-import ru.lenivtsev.products.ProductRepositoryImpl;
+import ru.lenivtsev.repository.ProductRepository;
+import ru.lenivtsev.repository.ProductRepositoryImpl;
 
 @Configuration
 public class AppConfiguration {

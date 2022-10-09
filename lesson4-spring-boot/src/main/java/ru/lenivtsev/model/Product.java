@@ -7,6 +7,8 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 
@@ -26,6 +28,13 @@ public class Product {
 
     @Column(nullable = false)
     private BigDecimal cost;
+
+    @ManyToMany
+    @JoinTable(
+            name = "products_in_basket",
+            joinColumns = @JoinColumn(name = "product_id"),
+            inverseJoinColumns = @JoinColumn(name = "basket_id"))
+    private List<Basket> basketList = new ArrayList<>();
 
     @Override
     public boolean equals(Object o) {

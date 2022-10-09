@@ -1,4 +1,4 @@
-package ru.lenivtsev.products;
+package ru.lenivtsev.repository;
 
 import org.springframework.stereotype.Repository;
 

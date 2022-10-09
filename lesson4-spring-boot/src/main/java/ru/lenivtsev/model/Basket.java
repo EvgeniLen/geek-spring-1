@@ -5,22 +5,24 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
+@Entity
+@Table(name ="baskets")
+@NoArgsConstructor
 @Getter
 @Setter
-@Entity
-@Table(name="roles")
-@NoArgsConstructor
-public class Role {
+public class Basket {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
-    private String roleName;
+    @OneToOne
+    private User owner;
 
-    @ManyToMany(mappedBy = "roles")
-    private List<User> users;
+    @ManyToMany(mappedBy = "basketList")
+    private List<Product> productList = new ArrayList<>();
 
 }

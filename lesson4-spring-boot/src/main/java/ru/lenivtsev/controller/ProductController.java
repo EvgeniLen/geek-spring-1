@@ -8,8 +8,14 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import ru.lenivtsev.exceptions.EntityNotFoundException;
+import ru.lenivtsev.model.dto.BasketDto;
 import ru.lenivtsev.model.dto.ProductDto;
+import ru.lenivtsev.model.dto.UserDto;
+import ru.lenivtsev.model.mapper.UserDtoMapper;
+import ru.lenivtsev.security.UserDetailsServiceImpl;
+import ru.lenivtsev.service.BasketService;
 import ru.lenivtsev.service.ProductService;
+import ru.lenivtsev.service.UserService;
 
 import javax.validation.Valid;
 import java.math.BigDecimal;
@@ -21,7 +27,9 @@ import java.util.Optional;
 @RequestMapping("/product")
 @RequiredArgsConstructor
 public class ProductController {
-        private final ProductService service;
+        private final ProductService productService;
+        private final BasketService basketService;
+        private final UserDetailsServiceImpl userDetailsService;
 
         @GetMapping
         public String listPage(
@@ -35,13 +43,17 @@ public class ProductController {
             if (pageValue < 0) pageValue = 0;
             int sizeValue = size.orElse((10));
             String sortFiledValue = sortField.filter(s -> !s.isBlank()).orElse("id");
-            model.addAttribute("products", service.findAllByFilter(productTitleFilter, productCostFilter, pageValue, sizeValue, sortFiledValue));
+
+            UserDto user = userDetailsService.getAuthentication().get();
+            BasketDto basketDto = basketService.findBasketByOwner(user);
+            model.addAttribute("basket", basketDto);
+            model.addAttribute("products", productService.findAllByFilter(productTitleFilter, productCostFilter, pageValue, sizeValue, sortFiledValue));
             return "product";
         }
 
         @GetMapping("/{id}")
         public String form(@PathVariable("id") long id, Model model) {
-            model.addAttribute("product", service.findByProductId(id)
+            model.addAttribute("product", productService.findByProductId(id)
                     .orElseThrow(() -> new EntityNotFoundException("Product not found")));
             return "product_form";
         }
@@ -54,7 +66,7 @@ public class ProductController {
 
         @DeleteMapping("{id}")
         public String deleteProductById(@PathVariable long id) {
-            service.deleteProductById(id);
+            productService.deleteProductById(id);
             return "redirect:/product";
         }
 
@@ -63,13 +75,13 @@ public class ProductController {
             if (bindingResult.hasErrors()) {
                 return "product_form";
             }
-            service.save(product);
+            productService.save(product);
             return "redirect:/product";
         }
 
         @PostMapping("/update")
         public String updateProduct(@ModelAttribute("product") ProductDto product) {
-            service.save(product);
+            productService.save(product);
             return "redirect:/product";
         }
 

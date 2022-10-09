@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" >
 
 <head th:replace="fragments/head.html :: head">
 
@@ -51,13 +51,18 @@
                 </thead>
                 <tbody>
                 <tr th:each="product : ${products}">
-                    <th scope="row" th:text="${product.id}">1</th>
+                    <th scope="row" th:text="${product.id}"></th>
                     <td th:text="${product.title}"></td>
                     <td th:text="${product.cost}">0</td>
                     <td>
                         <a class="btn btn-success" th:href="@{/product/{id}(id = ${product.id})}"><i class="fas fa-edit"></i></a>
                         <form class="d-inline" th:method="delete" th:action="@{/product/{id}/(id = ${product.id})}">
                             <button class="btn btn-danger"><i class="far fa-trash-alt"></i></button>
+                        </form>
+
+                        <!--  <form class="d-inline" th:action="@{/basket/{basketId}/{productId}(basketId = ${basket.id}, productId = ${product.id})}" method="post" th:object="${basket}">-->
+                        <form class="d-inline" th:action="@{/basket/{basketId}/{productId}(basketId = ${basket.id}, productId = ${product.id})}" method="post">
+                            <button class="btn btn-success"><i class="far fa-basket-alt"></i>Add to basket</button>
                         </form>
                     </td>
                 </tr>

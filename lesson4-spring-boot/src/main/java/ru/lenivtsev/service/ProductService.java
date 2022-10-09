@@ -7,7 +7,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import ru.lenivtsev.model.dto.ProductDto;
 import ru.lenivtsev.model.mapper.ProductDtoMapper;
-import ru.lenivtsev.products.ProductRepository;
+import ru.lenivtsev.repository.ProductRepository;
 
 import java.math.BigDecimal;
 import java.util.Optional;

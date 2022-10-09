@@ -7,6 +7,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "users")
@@ -29,8 +30,11 @@ public class User {
     @Column(nullable = false, length = 1024)
     private String password;
 
-    @ManyToMany(mappedBy = "users", fetch = FetchType.EAGER)
-    private List<Role> roles;
+    @ManyToMany(fetch = FetchType.EAGER)
+    private Set<Role> roles;
+
+    //@OneToOne
+    //private Basket basket;
 
     public User(String username) {
         this.username = username;

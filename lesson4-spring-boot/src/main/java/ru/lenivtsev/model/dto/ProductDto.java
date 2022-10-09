@@ -8,8 +8,9 @@ import lombok.Setter;
 import javax.validation.constraints.DecimalMax;
 import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Setter
@@ -25,6 +26,8 @@ public class ProductDto {
             value = "1000000")
     @DecimalMin(message = "Cost should be positive", value = "0")
     private BigDecimal cost;
+
+    private List<BasketDto> basketList = new ArrayList<>();
 
     public ProductDto(BigDecimal cost) {
         this.cost = cost;

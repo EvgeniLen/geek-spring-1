@@ -5,10 +5,14 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import ru.lenivtsev.model.Basket;
+import ru.lenivtsev.model.Role;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
+import java.util.List;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -30,6 +34,9 @@ public class UserDto {
 
     @JsonIgnore
     private String matchingPassword;
+
+    private Set<Role> roles;
+
 
     public UserDto(Long id, String username, String email, String password) {
         this.id = id;

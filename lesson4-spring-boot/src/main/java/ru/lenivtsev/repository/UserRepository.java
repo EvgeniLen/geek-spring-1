@@ -1,4 +1,4 @@
-package ru.lenivtsev.products;
+package ru.lenivtsev.repository;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.querydsl.QuerydslPredicateExecutor;
 import org.springframework.stereotype.Repository;
 import ru.lenivtsev.model.User;
+import ru.lenivtsev.model.dto.UserDto;
 
 import java.util.Optional;
 

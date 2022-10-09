@@ -36,7 +36,7 @@ public class UserResource {
 
     @GetMapping("/{id}/id")
     public UserDto form(@PathVariable("id") long id, Model model) {
-        return service.findUserById(id).orElseThrow(() -> new EntityNotFoundException("User not found"));
+        return service.findUserDtoById(id).orElseThrow(() -> new EntityNotFoundException("User not found"));
     }
 
     @PutMapping

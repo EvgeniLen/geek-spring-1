@@ -8,18 +8,21 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import ru.lenivtsev.model.User;
 import ru.lenivtsev.model.dto.UserDto;
 import ru.lenivtsev.model.mapper.UserDtoMapper;
-import ru.lenivtsev.products.UserRepository;
+import ru.lenivtsev.model.mapper.UserEncoderDtoMapper;
+import ru.lenivtsev.repository.UserRepository;
 
-import java.util.Collections;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class UserService {
 
     private final UserDtoMapper mapper;
+    private final UserEncoderDtoMapper encoderDtoMapper;
     private final UserRepository userRepository;
     private final PasswordEncoder encoder;
 
@@ -30,16 +33,24 @@ public class UserService {
                 .map(mapper::map);
     }
 
-    public Optional<UserDto> findUserById(Long id) {
+    public Optional<UserDto> findUserDtoById(Long id) {
         return userRepository.findById(id).map(mapper::map);
     }
 
+    public Optional<User> findUserById(Long id) {
+        return userRepository.findById(id);
+    }
+
     public void save(UserDto dto) {
-        userRepository.save(mapper.map(dto, encoder));
+        userRepository.save(encoderDtoMapper.map(dto, encoder));
     }
 
     public void deleteUserById(Long id) {
         userRepository.deleteById(id);
+    }
+
+    public Optional<UserDto> findUser(String name) {
+        return userRepository.findByUsername(name).map(mapper::map);
     }
 
     public org.springframework.security.core.userdetails.User findUserByUsername(String username) {
@@ -47,7 +58,9 @@ public class UserService {
                 .map(user -> new org.springframework.security.core.userdetails.User(
                         user.getUsername(),
                         user.getPassword(),
-                        Collections.singletonList(new SimpleGrantedAuthority("ADMIN"))
+                        user.getRoles().stream()
+                                .map(role -> new SimpleGrantedAuthority(role.getRoleName()))
+                                .collect(Collectors.toList())
                 )).orElseThrow(() -> new UsernameNotFoundException(username));
 
     }
